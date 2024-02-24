@@ -55,11 +55,11 @@ class base_tokenizer:
                 i += 1
         return new_tokens
     
-    def _retrieve_training_history(self,title,vocab_size):
+    def _retrieve_training_history(self,title,vocab_size,tokenizer_folder_path=os.getcwd()):
         """
             retrieve the dictionaries
         """
-        self._get_file_paths(title,vocab_size)
+        self._get_file_paths(title,vocab_size,tokenizer_folder_path)
         try:
             with open(self.vocab_path,"rb") as f:
                 vocab = pickle.load(f)
