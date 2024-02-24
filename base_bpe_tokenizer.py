@@ -3,6 +3,7 @@ import shutil
 from typing import Optional
 import pickle
 import numpy as np
+from tqdm.auto import tqdm
 
 class ConfigError(Exception):
     """for invalid user configuration of tokenizer class"""
@@ -122,13 +123,16 @@ class TrainTokenizer(base_tokenizer):
         """
         vocab_size = len(self.merge_history) + self._base_vocab_size
         num_merges = self.final_vocab_size - vocab_size
+        progress_bar = tqdm(range(num_merges))
+
         for i in range(num_merges):
+            progress_bar.update(1)
             pair_counts = self._get_pair_counts(tokens=self.tokens)
             top_pair = max(pair_counts,key=pair_counts.get)
             self.tokens = self._merge_pair(tokens=self.tokens,pair=top_pair,new_token=vocab_size+i)
             self.merge_history[top_pair] = vocab_size+i
             self.vocab[vocab_size+i] = self.vocab[top_pair[0]] + self.vocab[top_pair[1]]
-            print(f"merged {top_pair} as {vocab_size+i}")
+            #print(f"merged {top_pair} as {vocab_size+i}")
         
         self._get_file_paths(self.title,self.final_vocab_size)
 
