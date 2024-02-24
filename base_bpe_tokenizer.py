@@ -21,11 +21,11 @@ class base_tokenizer:
         self._base_vocab_size = 256
         
     
-    def _get_file_paths(self,title,vocab_size):
+    def _get_file_paths(self,title,vocab_size,tokenizer_folder_path=os.getcwd()):
         self.folder = title + "_base_tok_folder"
-        self.vocab_path = os.path.join(self.folder, title + "_vocab_dict_size"+str(vocab_size)+".pkl")
-        self.merges_path = os.path.join(self.folder, title + "_merge_history_size"+str(vocab_size)+".pkl")
-        self.tokens_path = os.path.join(self.folder, title + "_tokens_size"+str(vocab_size)+".npy")
+        self.vocab_path = os.path.join(tokenizer_folder_path,self.folder, title + "_vocab_dict_size"+str(vocab_size)+".pkl")
+        self.merges_path = os.path.join(tokenizer_folder_path,self.folder, title + "_merge_history_size"+str(vocab_size)+".pkl")
+        self.tokens_path = os.path.join(tokenizer_folder_path,self.folder, title + "_tokens_size"+str(vocab_size)+".npy")
 
     def _get_pair_counts(self,tokens):
         """
@@ -157,11 +157,12 @@ class ApplyTokenizer(base_tokenizer):
             mode: str, "encode" or "decode"
             title: str, tokenizer trained on which texts user wish to apply
             vocab_size: int, which version of the tokenizer user wish to apply, usually in thousands
+            tokenizer_folder_path: file path to the tokenizer folder, to access the dictionaries
 
     """
-    def __init__(self, title, vocab_size):
+    def __init__(self, title, vocab_size, tokenizer_folder_path):
         super(ApplyTokenizer,self).__init__()
-        self.vocab, self.merge_history, _ = self._retrieve_training_history(title=title,vocab_size=vocab_size)
+        self.vocab, self.merge_history, _ = self._retrieve_training_history(title=title,vocab_size=vocab_size,tokenizer_folder_path=tokenizer_folder_path)
     
     def encode(self,text):
         assert type(text) == str, "input for encoding is not string"
