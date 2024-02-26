@@ -12,7 +12,6 @@ class ConfigError(Exception):
 class base_tokenizer:
     """
         This is the base class for tokenizer, it provde basic functionalities such as produce pair counts and merge new tokens
-        Args:
 
     """
     def __init__(self):
