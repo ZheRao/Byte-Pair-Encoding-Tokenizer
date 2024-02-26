@@ -10,3 +10,6 @@ This is necessary for training tokenizer on a large corpus (e.g., 10 Million wor
 for LOR, there were more than 800,000 chunks, saving and loading with npy format takes around 30 seconds in total, and 114 MB storage space
 processing, saving, loading, and recovering with my method only took 3 seconds, and 14 MB storage space
 Details are in improved_tokenizer_experiment.ipynb
+
+
+Regex tokenizer can handle special characters
