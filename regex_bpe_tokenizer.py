@@ -241,6 +241,7 @@ class ApplyTokenizer(regex_tokenizer):
         self.title = title
         self.vocab, self.merge_history, _ = self._retrieve_training_history(title=title,vocab_size=vocab_size,tokenizer_folder_path=tokenizer_folder_path)
         self._read_update_special_tokens(special_token_list,tokenizer_folder_path,"infer")
+        self._reconcile_special_token()
 
     def _encode_chunk(self,text_chunk):
         tokens = list(text_chunk.encode("utf-8"))
@@ -282,6 +283,16 @@ class ApplyTokenizer(regex_tokenizer):
         text = b"".join(parts_decoded)
         text_decoded = text.decode("utf-8",errors="replace")
         return text_decoded
+    
+    def _reconcile_special_token(self):
+        """
+            This function assign index values for special tokens with index directly after vocabulary count
+            For example: previously <|title|> is 1000000, say vocabulary size is 8000, then after reconcile, <|title|> is 8000 or 8001
+        """
+        max_idx = len(self.vocab) - 1
+        for  i in range(len(self.special_token_list)):
+            self.special_tokens[self.special_token_list[i]] = max_idx + 1 + i
+        self.inverse_special_tokens = {v:k for k, v in self.special_tokens.items()}
 
         
 
